@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post-Capture Analysis - The Process</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed": "#6c9fff",
+            "on-surface": "#2c2f32",
+            "secondary-fixed": "#c6cfff",
+            "on-tertiary-fixed": "#41004d",
+            "on-tertiary": "#ffeefb",
+            "on-primary": "#f0f2ff",
+            "primary-dim": "#004da4",
+            "inverse-primary": "#4a8eff",
+            "on-primary-fixed-variant": "#002a60",
+            "error-dim": "#9f0519",
+            "on-tertiary-container": "#60136d",
+            "tertiary": "#883c93",
+            "inverse-on-surface": "#9a9da0",
+            "tertiary-container": "#f39cfb",
+            "outline-variant": "#abadb0",
+            "surface-container-high": "#dfe3e7",
+            "surface-container-highest": "#d9dde1",
+            "secondary-fixed-dim": "#b3c1ff",
+            "tertiary-fixed-dim": "#e48fed",
+            "primary-fixed-dim": "#5091ff",
+            "surface-container-low": "#eef1f4",
+            "background": "#f5f7fa",
+            "error-container": "#fb5151",
+            "secondary-container": "#c6cfff",
+            "surface-tint": "#0058ba",
+            "outline": "#74777a",
+            "on-error-container": "#570008",
+            "on-secondary-fixed-variant": "#2b48ac",
+            "surface-container": "#e5e8ec",
+            "on-primary-container": "#00214e",
+            "tertiary-dim": "#7a2f86",
+            "primary": "#0058ba",
+            "on-surface-variant": "#595c5e",
+            "secondary-dim": "#2a47ab",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary": "#f2f1ff",
+            "on-tertiary-fixed-variant": "#6a1f77",
+            "primary-container": "#6c9fff",
+            "on-primary-fixed": "#000000",
+            "inverse-surface": "#0b0f11",
+            "on-background": "#2c2f32",
+            "on-secondary-fixed": "#00298b",
+            "surface-dim": "#d0d5d9",
+            "tertiary-fixed": "#f39cfb",
+            "on-error": "#ffefee",
+            "surface": "#f5f7fa",
+            "secondary": "#3854b7",
+            "surface-bright": "#f5f7fa",
+            "on-secondary-container": "#1f3ea2",
+            "surface-variant": "#d9dde1",
+            "error": "#b31b25"
+          },
+          fontFamily: {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    
+    .loading-spinner {
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top: 3px solid #0058ba;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .glass-effect {
+      background: rgba(245, 247, 250, 0.8);
+      backdrop-filter: blur(20px);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col">
+<!-- Top Navigation Shell -->
+<header class="flex items-center justify-between px-6 h-16 w-full fixed top-0 z-50 bg-[#F5F7FA] dark:bg-slate-900 no-border">
+<div class="flex items-center gap-4">
+<button class="hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full scale-95 active:duration-150">
+<span class="material-symbols-outlined text-[#0058BA]">arrow_back</span>
+</button>
+<h1 class="font-['Inter'] font-semibold tracking-tight text-on-surface text-lg">History</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full scale-95 active:duration-150">
+<span class="material-symbols-outlined text-slate-500">delete_sweep</span>
+</button>
+</div>
+</header>
+<main class="flex-grow flex flex-col pt-16">
+<!-- Visual Context Area (Top 40%) -->
+<div class="relative w-full h-[353px] overflow-hidden bg-inverse-surface">
+<img alt="captured document" class="w-full h-full object-cover opacity-60 grayscale-[20%]" data-alt="close-up top-down view of a professional business card with visible phone number and street address on a clean white desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhRnt7E_QL0sR78o9uV1ejy8SHLRQYfZ7e7eLgS44CyHZkHIRqrfYT89raRVQwk_EypjPnM1K7cEZKLwD7wBlQqvrM_PHx57cauGBpAiiiu64QaIH2WMWNLkfa1YuP7Cz89UwoOtN1uvaihgf2t2LDkTn89a_eAVulBrZNY8VTR67PScsXAtZ856epsAnfjznLRB3Eqp4FCm0RuL4FyATC788SrJ_WcB4OoIVacfKjMXt9ln7OFuvQMgdABNba3u9uMbbLZc9Uig"/>
+<!-- OCR Highlights / Bounding Boxes -->
+<!-- Phone Box -->
+<div class="absolute top-[30%] left-[20%] w-[40%] h-8 border-2 border-primary-fixed bg-primary-fixed/20 rounded-lg shadow-[0_0_15px_rgba(108,159,255,0.4)] flex items-center justify-center">
+<span class="text-[10px] absolute -top-5 left-0 bg-primary text-white px-2 py-0.5 rounded-full font-bold tracking-wider">PHONE</span>
+</div>
+<!-- Address Box -->
+<div class="absolute top-[50%] left-[15%] w-[60%] h-12 border-2 border-primary-fixed bg-primary-fixed/20 rounded-lg shadow-[0_0_15px_rgba(108,159,255,0.4)] flex items-center justify-center">
+<span class="text-[10px] absolute -top-5 left-0 bg-primary text-white px-2 py-0.5 rounded-full font-bold tracking-wider">ADDRESS</span>
+</div>
+<!-- Processing Overlay (Simulated State) -->
+<div class="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+<div class="flex flex-col items-center gap-4">
+<div class="loading-spinner"></div>
+<span class="text-white text-sm font-semibold tracking-widest uppercase">Analyzing...</span>
+</div>
+</div>
+</div>
+<!-- Results Bottom Sheet (Bottom 60%) -->
+<section class="flex-grow bg-surface-container-lowest rounded-t-[2rem] -mt-8 relative z-10 shadow-[0_-8px_40px_rgba(0,0,0,0.08)] px-6 pt-8 pb-32">
+<!-- Drag Handle -->
+<div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-surface-container-highest rounded-full"></div>
+<div class="flex items-center justify-between mb-8">
+<div>
+<p class="text-[11px] font-bold text-primary tracking-[0.1em] uppercase mb-1">Intent Detected</p>
+<h2 class="text-2xl font-extrabold text-on-surface tracking-tight">Post-Capture Results</h2>
+</div>
+<div class="bg-surface-container-low p-3 rounded-2xl">
+<span class="material-symbols-outlined text-primary">data_object</span>
+</div>
+</div>
+<!-- Detected Entities List -->
+<div class="space-y-6">
+<!-- Entity 1: Phone -->
+<div class="bg-surface-container-low rounded-3xl p-6 transition-all hover:bg-surface-container border border-white/40">
+<div class="flex items-start gap-4 mb-5">
+<div class="bg-primary-container/30 p-3 rounded-2xl text-primary">
+<span class="material-symbols-outlined">call</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant tracking-wider uppercase mb-0.5">Phone Number</p>
+<h3 class="text-xl font-bold text-on-surface tracking-tight">+91 98765 43210</h3>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center gap-1.5 bg-primary text-white py-3 rounded-2xl shadow-[0_4px_12px_rgba(0,88,186,0.2)] active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">call</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Call</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1.5 bg-surface-container-lowest text-on-surface py-3 rounded-2xl shadow-sm border border-outline-variant/10 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">WhatsApp</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1.5 bg-surface-container-lowest text-on-surface py-3 rounded-2xl shadow-sm border border-outline-variant/10 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Save</span>
+</button>
+</div>
+</div>
+<!-- Entity 2: Address -->
+<div class="bg-surface-container-low rounded-3xl p-6 transition-all hover:bg-surface-container border border-white/40">
+<div class="flex items-start gap-4 mb-5">
+<div class="bg-tertiary-container/30 p-3 rounded-2xl text-tertiary">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div class="flex-grow">
+<p class="text-xs font-bold text-on-surface-variant tracking-wider uppercase mb-0.5">Address Detected</p>
+<h3 class="text-lg font-semibold text-on-surface leading-tight">123, MG Road, Bengaluru, Karnataka, 560001</h3>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-grow flex items-center justify-center gap-2 bg-primary text-white py-4 rounded-2xl shadow-[0_4px_12px_rgba(0,88,186,0.2)] active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">near_me</span>
+<span class="text-xs font-bold uppercase tracking-wider">Navigate</span>
+</button>
+<button class="px-6 flex items-center justify-center bg-surface-container-lowest text-on-surface py-4 rounded-2xl shadow-sm border border-outline-variant/10 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+<span class="ml-2 text-xs font-bold uppercase tracking-wider">Copy</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-4px_40px_rgba(44,47,50,0.06)] rounded-t-[1.5rem]">
+<a class="flex items-center justify-center text-slate-400 p-4 hover:text-[#0058BA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="photo_camera">photo_camera</span>
+</a>
+<a class="flex items-center justify-center bg-[#0058BA] text-white rounded-full p-4 scale-110 -translate-y-2 shadow-[0_8px_24px_rgba(0,88,186,0.3)] bounce-and-scale duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</a>
+<a class="flex items-center justify-center text-slate-400 p-4 hover:text-[#0058BA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</nav>
+</body></html>

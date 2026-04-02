@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Viewfinder - Scan-to-Intent</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed": "#6c9fff",
+              "on-surface": "#2c2f32",
+              "secondary-fixed": "#c6cfff",
+              "on-tertiary-fixed": "#41004d",
+              "on-tertiary": "#ffeefb",
+              "on-primary": "#f0f2ff",
+              "primary-dim": "#004da4",
+              "inverse-primary": "#4a8eff",
+              "on-primary-fixed-variant": "#002a60",
+              "error-dim": "#9f0519",
+              "on-tertiary-container": "#60136d",
+              "tertiary": "#883c93",
+              "inverse-on-surface": "#9a9da0",
+              "tertiary-container": "#f39cfb",
+              "outline-variant": "#abadb0",
+              "surface-container-high": "#dfe3e7",
+              "surface-container-highest": "#d9dde1",
+              "secondary-fixed-dim": "#b3c1ff",
+              "tertiary-fixed-dim": "#e48fed",
+              "primary-fixed-dim": "#5091ff",
+              "surface-container-low": "#eef1f4",
+              "background": "#f5f7fa",
+              "error-container": "#fb5151",
+              "secondary-container": "#c6cfff",
+              "surface-tint": "#0058ba",
+              "outline": "#74777a",
+              "on-error-container": "#570008",
+              "on-secondary-fixed-variant": "#2b48ac",
+              "surface-container": "#e5e8ec",
+              "on-primary-container": "#00214e",
+              "tertiary-dim": "#7a2f86",
+              "primary": "#0058ba",
+              "on-surface-variant": "#595c5e",
+              "secondary-dim": "#2a47ab",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary": "#f2f1ff",
+              "on-tertiary-fixed-variant": "#6a1f77",
+              "primary-container": "#6c9fff",
+              "on-primary-fixed": "#000000",
+              "inverse-surface": "#0b0f11",
+              "on-background": "#2c2f32",
+              "on-secondary-fixed": "#00298b",
+              "surface-dim": "#d0d5d9",
+              "tertiary-fixed": "#f39cfb",
+              "on-error": "#ffefee",
+              "surface": "#f5f7fa",
+              "secondary": "#3854b7",
+              "surface-bright": "#f5f7fa",
+              "on-secondary-container": "#1f3ea2",
+              "surface-variant": "#d9dde1",
+              "error": "#b31b25"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .scanner-frame {
+            background: linear-gradient(to right, white 2px, transparent 2px) 0 0,
+                        linear-gradient(to right, white 2px, transparent 2px) 0 100%,
+                        linear-gradient(to left, white 2px, transparent 2px) 100% 0,
+                        linear-gradient(to left, white 2px, transparent 2px) 100% 100%,
+                        linear-gradient(to bottom, white 2px, transparent 2px) 0 0,
+                        linear-gradient(to bottom, white 2px, transparent 2px) 100% 0,
+                        linear-gradient(to top, white 2px, transparent 2px) 0 100%,
+                        linear-gradient(to top, white 2px, transparent 2px) 100% 100%;
+            background-repeat: no-repeat;
+            background-size: 40px 40px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface overflow-hidden">
+<!-- Viewfinder Main Container -->
+<main class="relative h-screen w-full bg-black flex flex-col items-center justify-center">
+<!-- Camera Live Preview Mock -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center opacity-90" data-alt="Modern minimalist living room with high ceilings, large windows, and soft natural sunlight casting gentle shadows on white walls" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0z9SotTDQK-aFpKfBiynR3Dv2OQOWPKa_cF294MaDuNlx0YmyCeey41ERlTNBIDEJvBfnGhbzxwAqA03ouymME4czHLQLGPjA8v83hipCQ3XVpu6V5mIuQXsFX1hGrOPH-Czg7NwnHfZ-4--h0AsBk8rf0cIYlh-zrEtgqirgrTOzUepIjysAnYHM7PP66WjhdvYP6eXfIolsG9bhRxZV-v5fcUfrsHBlHpMYAmC62xHMviEyHL_0-TR5eOMN5PMEg_OO8yorNQ')">
+</div>
+<!-- Atmospheric Overlay for UI legibility -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
+</div>
+<!-- Scanning Target Box -->
+<div class="relative z-10 w-72 h-72 md:w-96 md:h-96 scanner-frame flex items-center justify-center">
+<!-- Pulsing Center Indicator -->
+<div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-pulse"></div>
+<!-- Scanning Line (Purely visual) -->
+<div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/50 to-transparent translate-y-0 opacity-20"></div>
+</div>
+<!-- Top Bar Overlay -->
+<div class="absolute top-0 left-0 w-full px-6 pt-12 pb-6 z-20 flex justify-between items-center">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<div class="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/10">
+<p class="text-white text-xs font-medium tracking-wider uppercase font-label">Auto-Detecting</p>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+</button>
+</div>
+<!-- Bottom Controls -->
+<div class="absolute bottom-0 left-0 w-full px-8 pb-12 z-20 flex flex-col items-center gap-10">
+<!-- Instructions -->
+<p class="text-white/80 text-sm font-body tracking-wide text-center max-w-[240px]">
+                Center the object in the frame to identify
+            </p>
+<div class="w-full flex items-center justify-between">
+<!-- Left Action: Live Mode -->
+<div class="flex flex-col items-center gap-2">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="photo_library">photo_library</span>
+</button>
+<span class="text-white/60 text-[10px] font-label uppercase tracking-widest">Live Mode</span>
+</div>
+<!-- Center: Shutter Button -->
+<div class="relative group">
+<!-- Shutter Ring -->
+<div class="absolute -inset-3 border-2 border-white/30 rounded-full scale-100 group-active:scale-95 transition-transform duration-200"></div>
+<!-- Main Button -->
+<button class="relative w-20 h-20 bg-gradient-to-br from-primary to-primary-container rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(0,88,186,0.4)] hover:shadow-[0_12px_40px_rgba(0,88,186,0.5)] transition-all active:scale-90 active:duration-150">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="photo_camera" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+</button>
+</div>
+<!-- Right Action: Light -->
+<div class="flex flex-col items-center gap-2">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="flashlight_on">flashlight_on</span>
+</button>
+<span class="text-white/60 text-[10px] font-label uppercase tracking-widest">Light</span>
+</div>
+</div>
+</div>
+<!-- Glassmorphic Search Hints (Editorial Minimalist cards) -->
+<div class="absolute bottom-40 left-0 w-full px-6 z-10 pointer-events-none">
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-4 mask-fade-right">
+<div class="flex-none bg-white/5 backdrop-blur-sm px-4 py-2.5 rounded-full border border-white/10 flex items-center gap-2">
+<span class="material-symbols-outlined text-white/40 text-sm" data-icon="eco">eco</span>
+<span class="text-white/80 text-xs font-medium">Plants</span>
+</div>
+<div class="flex-none bg-white/5 backdrop-blur-sm px-4 py-2.5 rounded-full border border-white/10 flex items-center gap-2">
+<span class="material-symbols-outlined text-white/40 text-sm" data-icon="shopping_bag">shopping_bag</span>
+<span class="text-white/80 text-xs font-medium">Products</span>
+</div>
+<div class="flex-none bg-white/5 backdrop-blur-sm px-4 py-2.5 rounded-full border border-white/10 flex items-center gap-2">
+<span class="material-symbols-outlined text-white/40 text-sm" data-icon="translate">translate</span>
+<span class="text-white/80 text-xs font-medium">Text</span>
+</div>
+<div class="flex-none bg-white/5 backdrop-blur-sm px-4 py-2.5 rounded-full border border-white/10 flex items-center gap-2">
+<span class="material-symbols-outlined text-white/40 text-sm" data-icon="restaurant">restaurant</span>
+<span class="text-white/80 text-xs font-medium">Food</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Hidden Bottom NavBar for context (Suppressed per "Task-Focused" rule but built for logic) -->
+<!-- Rule applied: Page intent is task-focused (Viewfinder/Camera). Supressed BottomNavBar. -->
+</body></html>
