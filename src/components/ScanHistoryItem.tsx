@@ -3,16 +3,17 @@
 // ============================================================
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors, Spacing, Radii, Typography, Shadows } from '../theme/tokens';
 import { ScanRecord } from '../storage/db';
 import { IntentType } from '../engine/parser';
 
-const INTENT_TYPE_META: Record<IntentType, { icon: string; label: string; color: string }> = {
-  phone:   { icon: '📞', label: 'Phone Contact',   color: Colors.phoneGreen },
-  upi:     { icon: '₹',  label: 'Payment UPI',     color: Colors.upiPurple },
-  address: { icon: '📍', label: 'Location Pin',    color: Colors.addressBlue },
-  email:   { icon: '✉️', label: 'Contact Detail',  color: Colors.emailOrange },
-  url:     { icon: '🌐', label: 'Secure Link',     color: Colors.urlTeal },
+const INTENT_TYPE_META: Record<IntentType, { icon: keyof typeof MaterialCommunityIcons.glyphMap; label: string; color: string }> = {
+  phone:   { icon: 'phone-outline', label: 'Phone Contact',   color: Colors.phoneGreen },
+  upi:     { icon: 'currency-inr',  label: 'Payment UPI',     color: Colors.upiPurple },
+  address: { icon: 'map-marker-outline', label: 'Location Pin', color: Colors.addressBlue },
+  email:   { icon: 'email-outline', label: 'Contact Detail',  color: Colors.emailOrange },
+  url:     { icon: 'link-variant', label: 'Secure Link',      color: Colors.urlTeal },
 };
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -45,7 +46,7 @@ export default function ScanHistoryItem({ record, onPress }: ScanHistoryItemProp
   const primaryIntent = record.intents[0];
   const meta = primaryIntent
     ? INTENT_TYPE_META[primaryIntent.type]
-    : { icon: '📄', label: 'Scan', color: Colors.onSurfaceVariant };
+    : { icon: 'file-document-outline' as const, label: 'Scan', color: Colors.onSurfaceVariant };
 
   const displayValue = primaryIntent?.display ?? record.rawText.slice(0, 40);
   const truncated = displayValue.length > 28 ? displayValue.slice(0, 25) + '...' : displayValue;
@@ -58,7 +59,7 @@ export default function ScanHistoryItem({ record, onPress }: ScanHistoryItemProp
     >
       {/* Icon thumbnail */}
       <View style={[styles.iconBox, { backgroundColor: Colors.surfaceContainerLow }]}>
-        <Text style={styles.icon}>{meta.icon}</Text>
+        <MaterialCommunityIcons name={meta.icon} size={20} color={meta.color} />
       </View>
 
       {/* Text */}
@@ -71,7 +72,7 @@ export default function ScanHistoryItem({ record, onPress }: ScanHistoryItemProp
       </View>
 
       {/* Chevron */}
-      <Text style={styles.chevron}>›</Text>
+      <Ionicons name="chevron-forward" size={18} color={Colors.onSurfaceVariant} />
     </TouchableOpacity>
   );
 }
@@ -85,10 +86,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surfaceContainerLowest,
-    borderRadius: Radii.xl,
+    borderRadius: Radii.lg,
     padding: Spacing.lg,
     gap: Spacing.md,
     marginHorizontal: Spacing.lg,
+    borderWidth: 1,
+    borderColor: Colors.outlineVariant,
     ...Shadows.card,
   },
   iconBox: {
@@ -99,9 +102,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  icon: {
-    fontSize: 20,
-  },
   textBlock: {
     flex: 1,
     gap: 2,
@@ -110,8 +110,9 @@ const styles = StyleSheet.create({
     ...Typography.labelSm,
   },
   valueText: {
-    ...Typography.headlineMd,
+    ...Typography.bodyLg,
     color: Colors.onSurface,
+    fontFamily: 'Inter_500Medium',
   },
   meta: {
     ...Typography.bodySm,
