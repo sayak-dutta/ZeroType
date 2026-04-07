@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useFocusEffect } from 'expo-router';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors, Spacing, Radii, Typography, Shadows } from '../../src/theme/tokens';
 import { useBiometrics } from '../../src/hooks/useBiometrics';
 import ScanHistoryItem, { ScanHistoryItemSeparator } from '../../src/components/ScanHistoryItem';
@@ -46,6 +47,7 @@ const PAGE_SIZE = 10;
 
 export default function HistoryScreen() {
   const { isAuthenticated, isSupported, authenticate, isLoading: bioLoading } = useBiometrics();
+  const shouldRequireAuth = isSupported;
   const [records, setRecords] = useState<ScanRecord[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,8 +68,10 @@ export default function HistoryScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      if (isAuthenticated) loadRecords(true);
-    }, [isAuthenticated])
+      if (!shouldRequireAuth || isAuthenticated) {
+        loadRecords(true);
+      }
+    }, [shouldRequireAuth, isAuthenticated, loadRecords])
   );
 
   const handleAuth = useCallback(async () => {
@@ -105,11 +109,11 @@ export default function HistoryScreen() {
   }, []);
 
   // LOCK GATE — shown when not authenticated
-  if (!isAuthenticated) {
+  if (shouldRequireAuth && !isAuthenticated) {
     return (
       <View style={styles.lockScreen}>
         <Animated.View entering={FadeIn} style={styles.lockCard}>
-          <Text style={styles.lockIcon}>🔒</Text>
+          <MaterialCommunityIcons name="shield-lock-outline" size={56} color={Colors.primary} />
           <Text style={styles.lockTitle}>History Vault</Text>
           <Text style={styles.lockSubtitle}>
             {isSupported
@@ -118,7 +122,7 @@ export default function HistoryScreen() {
           </Text>
           <TouchableOpacity style={styles.unlockBtn} onPress={handleAuth} disabled={bioLoading}>
             <Text style={styles.unlockBtnText}>
-              {bioLoading ? 'Verifying...' : isSupported ? '🫵  Unlock with Biometrics' : '🔓  Unlock'}
+              {bioLoading ? 'Verifying...' : isSupported ? 'Unlock with Biometrics' : 'Unlock'}
             </Text>
           </TouchableOpacity>
         </Animated.View>
@@ -133,18 +137,19 @@ export default function HistoryScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.eyebrow}>ACTIVITY OVERVIEW</Text>
+          <Text style={styles.eyebrow}>Recent Activity</Text>
           <Text style={styles.title}>
-            {totalCount} Recent{'\n'}Scans
+            Scan History
           </Text>
+          <Text style={styles.subtitle}>{totalCount} records stored on device</Text>
         </View>
         <View style={styles.headerRight}>
           <View style={styles.liveChip}>
             <View style={styles.liveDot} />
-            <Text style={styles.liveChipText}>Live{'\n'}Encrypted</Text>
+            <Text style={styles.liveChipText}>Encrypted</Text>
           </View>
           <TouchableOpacity onPress={handleClearAll} style={{ marginTop: Spacing.sm }}>
-            <Text style={{ fontSize: 20 }}>🗑</Text>
+            <MaterialCommunityIcons name="delete-outline" size={20} color={Colors.onSurfaceVariant} />
           </TouchableOpacity>
         </View>
       </View>
@@ -184,7 +189,7 @@ export default function HistoryScreen() {
         ListEmptyComponent={
           !isLoading ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyIcon}>📭</Text>
+              <Ionicons name="archive-outline" size={52} color={Colors.onSurfaceVariant} />
               <Text style={styles.emptyTitle}>No scans yet</Text>
               <Text style={styles.emptySubtitle}>Your captured scans will appear here.</Text>
             </View>
@@ -217,7 +222,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingHorizontal: Spacing['2xl'],
     paddingTop: Spacing['3xl'],
     paddingBottom: Spacing.xl,
@@ -226,10 +231,17 @@ const styles = StyleSheet.create({
     ...Typography.labelMd,
     color: Colors.onSurfaceVariant,
     marginBottom: 4,
+    textTransform: 'none',
+    letterSpacing: 0.2,
   },
   title: {
-    ...Typography.displayMd,
+    ...Typography.displaySm,
     color: Colors.onSurface,
+  },
+  subtitle: {
+    ...Typography.bodySm,
+    color: Colors.onSurfaceVariant,
+    marginTop: 2,
   },
   headerRight: {
     alignItems: 'flex-end',
@@ -256,7 +268,7 @@ const styles = StyleSheet.create({
     color: Colors.onSurface,
     textTransform: 'none',
     letterSpacing: 0,
-    lineHeight: 14,
+    lineHeight: 12,
   },
   sectionHeader: {
     paddingHorizontal: Spacing['2xl'],
@@ -272,7 +284,6 @@ const styles = StyleSheet.create({
     paddingTop: Spacing['5xl'],
     gap: Spacing.md,
   },
-  emptyIcon: { fontSize: 56 },
   emptyTitle: { ...Typography.headlineLg, color: Colors.onSurface },
   emptySubtitle: { ...Typography.bodyMd, color: Colors.onSurfaceVariant },
   loadMoreBtn: {
