@@ -10,6 +10,7 @@ import {
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat, withSequence,
   withTiming, FadeIn, FadeOut, ZoomIn,
@@ -91,7 +92,7 @@ export default function CameraScreen() {
   if (!permission.granted) {
     return (
       <View style={styles.permissionScreen}>
-        <Text style={styles.permissionIcon}>📷</Text>
+        <Ionicons name="camera-outline" size={58} color={Colors.primary} style={styles.permissionIcon} />
         <Text style={styles.permissionTitle}>Camera Access Needed</Text>
         <Text style={styles.permissionBody}>
           ScanIntent needs camera access to capture and recognize text from physical documents.
@@ -142,19 +143,19 @@ export default function CameraScreen() {
       <View style={styles.topBar}>
         <View style={styles.topBarPill}>
           <View style={styles.autoDotLive} />
-          <Text style={styles.topBarText}>AUTO-DETECTING</Text>
+          <Text style={styles.topBarText}>Auto Detecting</Text>
         </View>
         <TouchableOpacity style={styles.iconBtn} onPress={() =>
           Alert.alert('ScanIntent', 'Point your camera at text (business cards, banners, notes). Tap the shutter to capture and extract phone numbers, UPI IDs, addresses, and more — all offline.')
         }>
-          <Text style={styles.iconBtnText}>ⓘ</Text>
+          <Ionicons name="information-circle-outline" size={18} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
       {/* Hint text */}
       <Animated.View entering={FadeIn} style={styles.hintContainer} pointerEvents="none">
         <View style={styles.hintPill}>
-          <Text style={styles.hintText}>Center the object in the frame to identify</Text>
+          <Text style={styles.hintText}>Center text in the frame to scan</Text>
         </View>
       </Animated.View>
 
@@ -162,8 +163,8 @@ export default function CameraScreen() {
       <View style={styles.bottomControls}>
         {/* Gallery */}
         <TouchableOpacity style={styles.sideControl} onPress={handleGallery}>
-          <Text style={styles.sideControlIcon}>🖼</Text>
-          <Text style={styles.sideControlLabel}>GALLERY</Text>
+          <Ionicons name="images-outline" size={22} color="#FFFFFF" />
+          <Text style={styles.sideControlLabel}>Gallery</Text>
         </TouchableOpacity>
 
         {/* Capture FAB */}
@@ -174,14 +175,18 @@ export default function CameraScreen() {
           activeOpacity={0.85}
         >
           <View style={styles.captureInner}>
-            <Text style={styles.captureIcon}>📷</Text>
+            <Ionicons name="camera" size={26} color={Colors.onPrimary} />
           </View>
         </TouchableOpacity>
 
         {/* Flash */}
         <TouchableOpacity style={styles.sideControl} onPress={toggleFlash}>
-          <Text style={styles.sideControlIcon}>{flash === 'on' ? '🔦' : '💡'}</Text>
-          <Text style={styles.sideControlLabel}>LIGHT</Text>
+          <Ionicons
+            name={flash === 'on' ? 'flash' : 'flash-off-outline'}
+            size={22}
+            color="#FFFFFF"
+          />
+          <Text style={styles.sideControlLabel}>Light</Text>
         </TouchableOpacity>
       </View>
 
@@ -267,8 +272,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     backgroundColor: 'rgba(0,0,0,0.55)',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
     borderRadius: Radii.full,
   },
   autoDotLive: {
@@ -280,6 +285,8 @@ const styles = StyleSheet.create({
   topBarText: {
     ...Typography.labelMd,
     color: '#FFFFFF',
+    textTransform: 'none',
+    letterSpacing: 0.2,
   },
   iconBtn: {
     position: 'absolute',
@@ -290,10 +297,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.15)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  iconBtnText: {
-    fontSize: 18,
-    color: '#FFFFFF',
   },
 
   // Hint
@@ -330,18 +333,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     opacity: 0.85,
-  },
-  sideControlIcon: {
-    fontSize: 22,
+    minWidth: 72,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   sideControlLabel: {
     ...Typography.labelSm,
     color: 'rgba(255,255,255,0.7)',
+    textTransform: 'none',
+    letterSpacing: 0.1,
   },
   captureBtn: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 84,
+    height: 84,
+    borderRadius: 42,
     borderWidth: 3,
     borderColor: 'rgba(255,255,255,0.5)',
     backgroundColor: 'transparent',
@@ -352,9 +357,9 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   captureInner: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 66,
+    height: 66,
+    borderRadius: 33,
     backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -363,9 +368,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 16,
     elevation: 8,
-  },
-  captureIcon: {
-    fontSize: 28,
   },
 
   // Permission screen
@@ -378,7 +380,6 @@ const styles = StyleSheet.create({
     gap: Spacing.lg,
   },
   permissionIcon: {
-    fontSize: 64,
     marginBottom: Spacing.md,
   },
   permissionTitle: {

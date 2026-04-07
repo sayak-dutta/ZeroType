@@ -5,26 +5,26 @@
 
 export const Colors = {
   // Surface Hierarchy (tonal layering — no borders)
-  surface: '#F5F7FA',              // Base canvas
-  surfaceContainerLow: '#EEF1F4', // Secondary sections
+  surface: '#F4F6F9',              // Base canvas
+  surfaceContainerLow: '#EBEFF4', // Secondary sections
   surfaceContainerLowest: '#FFFFFF', // Primary cards (elevated)
-  surfaceContainerHigh: '#E5E9EE', // Pressed/hover states
-  surfaceContainer: '#E9ECF1',
+  surfaceContainerHigh: '#E2E8F0', // Pressed/hover states
+  surfaceContainer: '#E7ECF2',
 
-  // Primary — "Sky Blue" Arctic accent
-  primary: '#0058BA',
-  primaryContainer: '#6C9FFF',
+  // Primary — neutral black theme accent
+  primary: '#111111',
+  primaryContainer: '#E5E7EB',
   onPrimary: '#FFFFFF',
-  onPrimaryContainer: '#001D4A',
+  onPrimaryContainer: '#000000',
 
   // Text
-  onSurface: '#2C2F32',          // Never pure black
-  onSurfaceVariant: '#6B7280',   // Secondary text, soft contrast
-  onSurfaceDisabled: '#A0A7B0',
+  onSurface: '#0F172A',          // Deep slate
+  onSurfaceVariant: '#475569',   // Secondary text
+  onSurfaceDisabled: '#94A3B8',
 
   // Utility
-  outlineVariant: 'rgba(44, 47, 50, 0.15)', // Ghost border
-  outline: 'rgba(44, 47, 50, 0.30)',
+  outlineVariant: 'rgba(15, 23, 42, 0.12)', // Ghost border
+  outline: 'rgba(15, 23, 42, 0.24)',
   scrim: 'rgba(0, 0, 0, 0.40)',
 
   // Semantic intent colors
@@ -32,29 +32,29 @@ export const Colors = {
   phoneGreenContainer: '#D1FAE5',
   upiPurple: '#7C3AED',
   upiPurpleContainer: '#EDE9FE',
-  addressBlue: '#0058BA',
-  addressBlueContainer: '#DBEAFE',
+  addressBlue: '#111111',
+  addressBlueContainer: '#E5E7EB',
   emailOrange: '#D97706',
   emailOrangeContainer: '#FEF3C7',
   urlTeal: '#0891B2',
   urlTealContainer: '#E0F2FE',
 
   // Glassmorphism tints
-  glassSurface: 'rgba(245, 247, 250, 0.85)',
+  glassSurface: 'rgba(244, 246, 249, 0.85)',
   glassBorder: 'rgba(255, 255, 255, 0.60)',
-  primaryGlow: 'rgba(0, 88, 186, 0.15)',
+  primaryGlow: 'rgba(17, 17, 17, 0.15)',
 };
 
 export const Gradients = {
   // Primary gradient — 135° as per DESIGN.md
-  primary: ['#0058BA', '#6C9FFF'] as string[],
+  primary: ['#111111', '#3A3A3A'] as string[],
   primaryAngle: 135,
 
   // Surface gradient for subtle depth
-  surface: ['#F5F7FA', '#EEF1F4'] as string[],
+  surface: ['#F4F6F9', '#EBEFF4'] as string[],
 
   // FAB glow (ambient shadow tint)
-  fabGlow: 'rgba(0, 88, 186, 0.25)',
+  fabGlow: 'rgba(17, 17, 17, 0.25)',
 };
 
 export const Spacing = {

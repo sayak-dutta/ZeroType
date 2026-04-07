@@ -3,10 +3,11 @@
 // Glassmorphism design with intent cards
 // ============================================================
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { Colors, Spacing, Radii, Typography, Shadows } from '../theme/tokens';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors, Spacing, Radii, Typography, Shadows, Animation } from '../theme/tokens';
 import IntentCard from './IntentCard';
 import { Intent } from '../engine/parser';
 
@@ -66,17 +67,17 @@ export default function ActionDrawer({ intents, visible, onClose, onSaveAll }: A
         {/* Header */}
         <View style={styles.drawerHeader}>
           <View>
-            <Text style={styles.eyebrow}>INTENT DETECTED</Text>
-            <Text style={styles.title}>Post-Capture Results</Text>
+            <Text style={styles.eyebrow}>Detected Data</Text>
+            <Text style={styles.title}>Review Results</Text>
           </View>
           <TouchableOpacity style={styles.closeBtn} onPress={handleClose}>
-            <Text style={styles.closeBtnText}>✕</Text>
+            <Ionicons name="close" size={18} color={Colors.onSurfaceVariant} />
           </TouchableOpacity>
         </View>
 
         {/* Count Badge */}
         {intents.length > 0 && (
-          <Animated.View entering={FadeIn.delay(100)} style={styles.countBadge}>
+          <Animated.View entering={FadeIn.delay(Animation.fast)} style={styles.countBadge}>
             <Text style={styles.countBadgeText}>
               {intents.length} {intents.length === 1 ? 'item' : 'items'} found
             </Text>
@@ -86,7 +87,7 @@ export default function ActionDrawer({ intents, visible, onClose, onSaveAll }: A
         {/* Intent Cards */}
         {intents.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyIcon}>🔍</Text>
+            <Ionicons name="search-outline" size={44} color={Colors.onSurfaceVariant} />
             <Text style={styles.emptyTitle}>No data detected</Text>
             <Text style={styles.emptySubtitle}>
               Try capturing a clearer image with better lighting.
@@ -96,7 +97,7 @@ export default function ActionDrawer({ intents, visible, onClose, onSaveAll }: A
           intents.map((intent, i) => (
             <Animated.View
               key={intent.id}
-              entering={FadeInDown.delay(i * 80).springify()}
+              entering={FadeInDown.delay(i * 60).springify()}
             >
               <IntentCard intent={intent} />
             </Animated.View>
@@ -105,9 +106,9 @@ export default function ActionDrawer({ intents, visible, onClose, onSaveAll }: A
 
         {/* Save All Button */}
         {intents.length > 0 && onSaveAll && (
-          <Animated.View entering={FadeInDown.delay(intents.length * 80 + 100)}>
+          <Animated.View entering={FadeInDown.delay(intents.length * 60 + Animation.fast)}>
             <TouchableOpacity style={styles.saveAllBtn} onPress={onSaveAll} activeOpacity={0.8}>
-              <Text style={styles.saveAllBtnText}>💾  Save Scan to History</Text>
+              <Text style={styles.saveAllBtnText}>Save Scan to History</Text>
             </TouchableOpacity>
           </Animated.View>
         )}
@@ -125,9 +126,9 @@ const styles = StyleSheet.create({
     ...Shadows.ambient,
   },
   sheetBackground: {
-    backgroundColor: Colors.surface,
-    // 10% primary tint for brand luminescence per DESIGN.md
-    opacity: 0.97,
+    backgroundColor: Colors.surfaceContainerLowest,
+    borderTopWidth: 1,
+    borderColor: Colors.outlineVariant,
   },
   handle: {
     backgroundColor: Colors.outlineVariant,
@@ -149,28 +150,26 @@ const styles = StyleSheet.create({
     ...Typography.labelMd,
     color: Colors.primary,
     marginBottom: 4,
+    textTransform: 'none',
+    letterSpacing: 0.2,
   },
   title: {
-    ...Typography.displaySm,
+    ...Typography.headlineLg,
     color: Colors.onSurface,
   },
   closeBtn: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     borderRadius: Radii.full,
     backgroundColor: Colors.surfaceContainerLow,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  closeBtnText: {
-    ...Typography.bodyMd,
-    color: Colors.onSurfaceVariant,
-  },
   countBadge: {
     alignSelf: 'flex-start',
     backgroundColor: Colors.primaryContainer,
     paddingHorizontal: Spacing.md,
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: Radii.full,
     marginBottom: Spacing.lg,
   },
@@ -185,10 +184,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing['4xl'],
     gap: Spacing.sm,
   },
-  emptyIcon: {
-    fontSize: 48,
-    marginBottom: Spacing.sm,
-  },
   emptyTitle: {
     ...Typography.headlineMd,
     color: Colors.onSurface,
@@ -199,15 +194,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   saveAllBtn: {
-    backgroundColor: Colors.surfaceContainerLow,
-    borderRadius: Radii.xl,
-    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.primary,
+    borderRadius: Radii.lg,
+    minHeight: 48,
+    paddingVertical: Spacing.md,
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: Spacing.sm,
+    ...Shadows.card,
   },
   saveAllBtnText: {
     ...Typography.bodyLg,
-    color: Colors.primary,
+    color: Colors.onPrimary,
     fontFamily: 'Inter_600SemiBold',
   },
 });
