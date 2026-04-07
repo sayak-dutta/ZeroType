@@ -3,8 +3,9 @@
 // ============================================================
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, Radii, Typography, Shadows } from '../../src/theme/tokens';
 
 function CustomTabBar({ state, descriptors, navigation }: any) {
@@ -22,26 +23,30 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
           if (!isFocused && !event.defaultPrevented) navigation.navigate(route.name);
         };
 
-        const icons: Record<string, string> = {
-          camera:   '📷',
-          history:  '🕐',
-          settings: '⚙️',
+        const icons: Record<string, { active: keyof typeof Ionicons.glyphMap; inactive: keyof typeof Ionicons.glyphMap }> = {
+          camera: { active: 'camera', inactive: 'camera-outline' },
+          history: { active: 'time', inactive: 'time-outline' },
+          settings: { active: 'settings', inactive: 'settings-outline' },
         };
-        const icon = icons[route.name] ?? '●';
+        const iconSet = icons[route.name] ?? { active: 'ellipse', inactive: 'ellipse-outline' };
+        const iconName = isFocused ? iconSet.active : iconSet.inactive;
+        const label = options?.title ?? route.name;
 
         if (isCenter) {
           return (
-            <TouchableOpacity key={route.key} style={styles.centerTabContainer} onPress={onPress} activeOpacity={0.8}>
+            <TouchableOpacity key={route.key} style={styles.centerTabContainer} onPress={onPress} activeOpacity={0.9}>
               <View style={[styles.centerFab, isFocused && styles.centerFabActive]}>
-                <Text style={styles.centerFabIcon}>{icon}</Text>
+                <Ionicons name={iconName} size={22} style={styles.centerFabIcon} />
               </View>
+              <Text style={[styles.centerLabel, isFocused && styles.centerLabelActive]}>{label}</Text>
             </TouchableOpacity>
           );
         }
 
         return (
-          <TouchableOpacity key={route.key} style={styles.tabItem} onPress={onPress} activeOpacity={0.7}>
-            <Text style={[styles.tabIcon, isFocused && styles.tabIconActive]}>{icon}</Text>
+          <TouchableOpacity key={route.key} style={[styles.tabItem, isFocused && styles.tabItemActive]} onPress={onPress} activeOpacity={0.9}>
+            <Ionicons name={iconName} size={18} style={[styles.tabIcon, isFocused && styles.tabIconActive]} />
+            <Text style={[styles.tabLabel, isFocused && styles.tabLabelActive]}>{label}</Text>
           </TouchableOpacity>
         );
       })}
@@ -69,34 +74,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surfaceContainerLowest,
-    paddingTop: Spacing.md,
-    paddingHorizontal: Spacing['3xl'],
+    paddingTop: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
     borderTopLeftRadius: Radii.xl,
     borderTopRightRadius: Radii.xl,
+    borderTopWidth: 1,
+    borderColor: Colors.outlineVariant,
     ...Shadows.ambient,
   },
   tabItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: Radii.lg,
     paddingVertical: Spacing.sm,
+    minHeight: 48,
+    marginHorizontal: 4,
+    gap: 2,
+  },
+  tabItemActive: {
+    backgroundColor: Colors.surfaceContainerLow,
   },
   tabIcon: {
-    fontSize: 24,
-    opacity: 0.4,
+    fontSize: 16,
+    opacity: 0.5,
   },
   tabIconActive: {
     opacity: 1,
+    color: Colors.primary,
+  },
+  tabLabel: {
+    ...Typography.labelSm,
+    color: Colors.onSurfaceVariant,
+    textTransform: 'none',
+    letterSpacing: 0,
+  },
+  tabLabelActive: {
+    color: Colors.primary,
   },
   centerTabContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -20,
+    marginTop: -12,
+    gap: 4,
   },
   centerFab: {
-    width: 58,
-    height: 58,
+    width: 54,
+    height: 54,
     borderRadius: Radii.full,
     backgroundColor: Colors.primary,
     alignItems: 'center',
@@ -106,10 +131,20 @@ const styles = StyleSheet.create({
     ...Shadows.fab,
   },
   centerFabActive: {
-    backgroundColor: Colors.onPrimaryContainer ?? Colors.primary,
-    transform: [{ scale: 1.08 }],
+    backgroundColor: Colors.onPrimaryContainer,
+    transform: [{ scale: 1.04 }],
   },
   centerFabIcon: {
-    fontSize: 24,
+    fontSize: 18,
+    color: Colors.onPrimary,
+  },
+  centerLabel: {
+    ...Typography.labelSm,
+    color: Colors.onSurfaceVariant,
+    textTransform: 'none',
+    letterSpacing: 0,
+  },
+  centerLabelActive: {
+    color: Colors.primary,
   },
 });

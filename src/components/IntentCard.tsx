@@ -5,41 +5,41 @@ import React, { useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, Platform, Alert,
 } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import * as Contacts from 'expo-contacts';
 import * as Haptics from 'expo-haptics';
 import { Colors, Spacing, Radii, Typography, Shadows } from '../theme/tokens';
 import { Intent } from '../engine/parser';
 
-// Icons as Unicode/SVG-like characters (replace with a real icon lib in production)
-const ICONS: Record<string, string> = {
-  phone: '📞',
-  whatsapp: '💬',
-  save: '👤',
-  navigate: '🧭',
-  copy: '📋',
-  pay: '💳',
-  email: '✉️',
-  open: '🔗',
-  upi: '₹',
-  address: '📍',
-  url: '🌐',
+const ICONS: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  phone: 'phone-outline',
+  whatsapp: 'message-outline',
+  save: 'account-plus-outline',
+  navigate: 'map-marker-radius-outline',
+  copy: 'content-copy',
+  pay: 'currency-inr',
+  email: 'email-outline',
+  open: 'open-in-new',
+  upi: 'currency-inr',
+  address: 'map-marker-outline',
+  url: 'link-variant',
 };
 
 const INTENT_META: Record<
   Intent['type'],
-  { label: string; icon: string; color: string; bgColor: string }
+  { label: string; icon: keyof typeof MaterialCommunityIcons.glyphMap; color: string; bgColor: string }
 > = {
-  phone: { label: 'PHONE NUMBER', icon: '📞', color: Colors.phoneGreen, bgColor: Colors.phoneGreenContainer },
-  upi:   { label: 'UPI ID',       icon: '₹',  color: Colors.upiPurple, bgColor: Colors.upiPurpleContainer },
-  address: { label: 'ADDRESS DETECTED', icon: '📍', color: Colors.addressBlue, bgColor: Colors.addressBlueContainer },
-  email: { label: 'EMAIL ADDRESS', icon: '✉️', color: Colors.emailOrange, bgColor: Colors.emailOrangeContainer },
-  url:   { label: 'WEB LINK',      icon: '🌐', color: Colors.urlTeal,   bgColor: Colors.urlTealContainer },
+  phone: { label: 'Phone Number', icon: 'phone-outline', color: Colors.phoneGreen, bgColor: Colors.phoneGreenContainer },
+  upi:   { label: 'UPI ID',       icon: 'currency-inr', color: Colors.upiPurple, bgColor: Colors.upiPurpleContainer },
+  address: { label: 'Address', icon: 'map-marker-outline', color: Colors.addressBlue, bgColor: Colors.addressBlueContainer },
+  email: { label: 'Email Address', icon: 'email-outline', color: Colors.emailOrange, bgColor: Colors.emailOrangeContainer },
+  url:   { label: 'Web Link',      icon: 'link-variant', color: Colors.urlTeal, bgColor: Colors.urlTealContainer },
 };
 
 interface ActionButtonProps {
   label: string;
-  icon: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
   onPress: () => void;
   primary?: boolean;
   color?: string;
@@ -58,9 +58,13 @@ function ActionButton({ label, icon, onPress, primary = false, color }: ActionBu
         primary && color ? { backgroundColor: color } : {},
       ]}
       onPress={handlePress}
-      activeOpacity={0.75}
+      activeOpacity={0.86}
     >
-      <Text style={styles.actionBtnIcon}>{icon}</Text>
+      <MaterialCommunityIcons
+        name={icon}
+        size={16}
+        color={primary ? Colors.onPrimary : Colors.onSurfaceVariant}
+      />
       <Text style={[styles.actionBtnLabel, primary && styles.actionBtnLabelPrimary]}>
         {label}
       </Text>
@@ -179,7 +183,7 @@ export default function IntentCard({ intent }: IntentCardProps) {
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={[styles.iconBubble, { backgroundColor: meta.bgColor }]}>
-          <Text style={[styles.iconText, { color: meta.color }]}>{meta.icon}</Text>
+          <MaterialCommunityIcons name={meta.icon} size={20} color={meta.color} />
         </View>
         <View style={styles.headerText}>
           <Text style={[styles.intentLabel, { color: meta.color }]}>{meta.label}</Text>
@@ -194,9 +198,11 @@ export default function IntentCard({ intent }: IntentCardProps) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.surfaceContainerLowest,
-    borderRadius: Radii.xl,
+    borderRadius: Radii.lg,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
+    borderWidth: 1,
+    borderColor: Colors.outlineVariant,
     ...Shadows.card,
   },
   header: {
@@ -213,19 +219,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  iconText: {
-    fontSize: 20,
-  },
   headerText: {
     flex: 1,
   },
   intentLabel: {
     ...Typography.labelMd,
     marginBottom: 2,
+    textTransform: 'none',
+    letterSpacing: 0.2,
   },
   intentValue: {
-    ...Typography.headlineMd,
+    ...Typography.bodyLg,
     color: Colors.onSurface,
+    fontFamily: 'Inter_500Medium',
   },
   actionsRow: {
     flexDirection: 'row',
@@ -238,23 +244,24 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 10,
     paddingHorizontal: Spacing.md,
-    borderRadius: Radii.md,
+    borderRadius: Radii.lg,
     backgroundColor: Colors.surfaceContainerLow,
     flex: 1,
     minWidth: 90,
+    minHeight: 44,
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.outlineVariant,
   },
   actionBtnPrimary: {
     backgroundColor: Colors.primary,
     flexGrow: 2,
   },
-  actionBtnIcon: {
-    fontSize: 14,
-  },
   actionBtnLabel: {
     ...Typography.labelMd,
     color: Colors.onSurfaceVariant,
-    letterSpacing: 0.5,
+    letterSpacing: 0.2,
+    textTransform: 'none',
   },
   actionBtnLabelPrimary: {
     color: Colors.onPrimary,

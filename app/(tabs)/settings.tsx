@@ -4,16 +4,17 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, Switch, TouchableOpacity,
-  ScrollView, Alert, Platform,
+  ScrollView, Alert,
 } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, Radii, Typography, Shadows } from '../../src/theme/tokens';
 import { clearAllScans } from '../../src/storage/db';
 import * as Haptics from 'expo-haptics';
 import { useBiometrics } from '../../src/hooks/useBiometrics';
 
 interface SettingRowProps {
-  icon: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
   label: string;
   description?: string;
   value?: boolean;
@@ -24,6 +25,7 @@ interface SettingRowProps {
 }
 
 function SettingRow({ icon, label, description, value, onToggle, onPress, destructive = false, showChevron = false }: SettingRowProps) {
+  const iconColor = destructive ? '#DC2626' : Colors.primary;
   return (
     <TouchableOpacity
       style={styles.settingRow}
@@ -33,7 +35,7 @@ function SettingRow({ icon, label, description, value, onToggle, onPress, destru
     >
       <View style={styles.settingRowLeft}>
         <View style={[styles.settingIcon, destructive && styles.settingIconDestructive]}>
-          <Text style={styles.settingIconText}>{icon}</Text>
+          <MaterialCommunityIcons name={icon} size={18} color={iconColor} />
         </View>
         <View style={styles.settingText}>
           <Text style={[styles.settingLabel, destructive && { color: '#DC2626' }]}>{label}</Text>
@@ -100,15 +102,16 @@ export default function SettingsScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.eyebrow}>PREFERENCES</Text>
+        <Text style={styles.eyebrow}>Preferences</Text>
         <Text style={styles.title}>Settings</Text>
+        <Text style={styles.subtitle}>Control privacy, feedback, and app data</Text>
       </View>
 
       {/* Privacy */}
       <Animated.View entering={FadeInDown.delay(60)}>
         <SectionCard title="PRIVACY & SECURITY">
           <SettingRow
-            icon="🔒"
+            icon="shield-lock-outline"
             label={`Require ${biometricLabel} for History`}
             description={isSupported ? `Lock History Vault behind ${biometricLabel}` : 'No biometric hardware detected'}
             value={requireBiometrics && isSupported}
@@ -121,7 +124,7 @@ export default function SettingsScreen() {
       <Animated.View entering={FadeInDown.delay(120)}>
         <SectionCard title="EXPERIENCE">
           <SettingRow
-            icon="📳"
+            icon="vibrate"
             label="Haptic Feedback"
             description="Vibrate when intents are detected"
             value={hapticsEnabled}
@@ -134,7 +137,7 @@ export default function SettingsScreen() {
       <Animated.View entering={FadeInDown.delay(180)}>
         <SectionCard title="DATA">
           <SettingRow
-            icon="🗑"
+            icon="delete-outline"
             label="Clear Scan History"
             description="Permanently delete all scan records"
             onPress={handleClearHistory}
@@ -150,7 +153,7 @@ export default function SettingsScreen() {
             <Text style={styles.appName}>ScanIntent</Text>
             <Text style={styles.aboutVersion}>Version 1.0.0</Text>
             <View style={styles.privacyBadge}>
-              <Text style={styles.privacyIcon}>🛡</Text>
+              <Ionicons name="shield-checkmark-outline" size={14} color={Colors.onSurfaceVariant} />
               <Text style={styles.privacyText}>100% On-Device · No Cloud · No Tracking</Text>
             </View>
             <Text style={styles.aboutDetail}>
@@ -183,25 +186,36 @@ const styles = StyleSheet.create({
     ...Typography.labelMd,
     color: Colors.onSurfaceVariant,
     marginBottom: 4,
+    textTransform: 'none',
+    letterSpacing: 0.2,
   },
   title: {
     ...Typography.displaySm,
     color: Colors.onSurface,
   },
+  subtitle: {
+    ...Typography.bodySm,
+    color: Colors.onSurfaceVariant,
+    marginTop: 6,
+  },
   section: {
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.lg,
     paddingHorizontal: Spacing.lg,
   },
   sectionTitle: {
     ...Typography.labelSm,
     color: Colors.onSurfaceVariant,
     marginLeft: Spacing.sm,
-    marginBottom: Spacing.sm,
+    marginBottom: 6,
+    textTransform: 'none',
+    letterSpacing: 0.2,
   },
   sectionCard: {
     backgroundColor: Colors.surfaceContainerLowest,
-    borderRadius: Radii.xl,
+    borderRadius: Radii.lg,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: Colors.outlineVariant,
     ...Shadows.card,
   },
   settingRow: {
@@ -210,7 +224,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.lg,
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.outlineVariant,
   },
   settingRowLeft: {
     flexDirection: 'row',
@@ -228,9 +243,6 @@ const styles = StyleSheet.create({
   },
   settingIconDestructive: {
     backgroundColor: '#FEE2E2',
-  },
-  settingIconText: {
-    fontSize: 18,
   },
   settingText: {
     flex: 1,
@@ -272,7 +284,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     marginTop: Spacing.sm,
   },
-  privacyIcon: { fontSize: 14 },
   privacyText: {
     ...Typography.labelSm,
     color: Colors.onSurfaceVariant,
